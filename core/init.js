@@ -3,7 +3,7 @@ const Router = require('koa-router')
 
 class InitManager  {
   static initCore(app){
-    // 入口
+    // ????
     InitManager.app = app
     InitManager.initLoadRouters()
     InitManager.LoadConfig()
