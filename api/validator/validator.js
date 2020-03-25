@@ -88,4 +88,13 @@ class LoginValidator extends LinValidator{
   }
 
 }
-module.exports = { PositiveIntegerValidator ,RegisterValidator, LoginValidator}
+
+class Tokenvalidator extends LinValidator{
+  constructor(){
+    super()
+    this.token = [
+      new Rule('isLength','token不合法',{min:1})
+    ]
+  }
+}
+module.exports = { PositiveIntegerValidator ,RegisterValidator, LoginValidator, Tokenvalidator}

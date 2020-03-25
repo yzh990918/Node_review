@@ -43,4 +43,13 @@ class ForbidenException extends HttpExecption{
     this.errorCode = 10003
   }
 }
-module.exports = { HttpExecption, ParameterException ,Success,LoginExecption, ForbidenException}
+
+class GetOpenidExecption extends HttpExecption{
+  constructor(msg,code,errorCode){
+    super()
+    this.msg = msg || '获取openid失败',
+    this.code = 403
+    this.errorCode = 10004
+  }
+}
+module.exports = { HttpExecption, ParameterException ,Success,LoginExecption, ForbidenException,GetOpenidExecption}

@@ -4,11 +4,12 @@ const router = new Router({
 })
 const bcrypt = require('bcryptjs')
 const { generateToken } = require('../../core/util')
-const { LoginValidator } = require('../validator/validator')
+const { LoginValidator, Tokenvalidator } = require('../validator/validator')
 const { LoginExecption } = require('../../core/http-execption')
 const { LoginType } = require('../../config/config')
 const { User } = require('../models/user')
 const {Auth} = require('../../middlewares/auth')
+const {WxManager} =require('../services/wx')
 router.post('/token', async ctx => {
   const v = await new LoginValidator().validate(ctx)
   //  校验登陆账号和密码
@@ -19,6 +20,9 @@ router.post('/token', async ctx => {
   switch (type) {
     case LoginType.USER_EMAIL:
       token = await emailLogin(account, secret)
+      break
+    case LoginType.USER_MINI:
+      token = await WxManager.codeTotoken(account)
       break
     default:
       throw new LoginExecption('类型异常')
@@ -48,4 +52,15 @@ async function vertifyEmail(account, secret) {
   }
   return user
 }
+
+// 校验 storage拿到的token是否合法
+router.post('/vertify',async(ctx)=>{
+  const v = await new Tokenvalidator().validate(ctx)
+  const token = v.get('body.token')
+  const result =Auth.verifyToken(token)
+  ctx.body= {
+    result:result
+  }
+
+})
 module.exports = router

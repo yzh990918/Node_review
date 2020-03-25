@@ -1,26 +1,22 @@
 const Router = require('koa-router')
-const router = new Router(
-  {
-    prefix:'/v1/classic'
-  }
-)
-const {Auth} = require('../../middlewares/auth')
-const { PositiveIntegerValidator } = require('../validator/validator')
+const { flow } = require('../models/flow')
+const router = new Router({
+  prefix: '/v1/classic'
+})
+const { Auth } = require('../../middlewares/auth')
+const { Art } = require('../models/art')
 
 //  使用用户权限校验中间价 必须放在路由中间件前面
-router.get('/latest',new Auth(10).m, (ctx, next) => {
-  ctx.body = ctx.auth.uid
-  // // 路径携带参数
-  // const path = ctx.params
-  // // 请求参数
-  // const query = ctx.request.query
-  // // 头部参数
-  // const headers = ctx.request.header
-  // // 请求json参数
-  // const body = ctx.request.body
-  // // 定义抛出异常
-  // const v = new PositiveIntegerValidator().validate(ctx)
-  // ctx.body = { key: 'book' }
+router.get('/latest', new Auth().m, async (ctx, next) => {
+  // 取出index最大的数据 获取id号和type 降序排列 取出一条数据
+  const latest = await flow.findOne({
+    order: [['index', 'DESC']]
+  })
+  // 获取实体
+  let art = await Art.getOne(latest.art_id, latest.type)
+  // 合并属性进入 art
+  art.setDataValue('index', latest.index)
+  ctx.body = art
 })
 
 module.exports = router

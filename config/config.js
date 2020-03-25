@@ -29,5 +29,10 @@ module.exports = {
     secretKey:"abcdefgH",
     //  定义令牌的时间
     expiresIn:60*60*24*30
+  },
+  wx:{
+    appId:"wxdcb143e3cf5afacd",
+    appSecret:"8a75dfade75690295ab94f82fc25c292",
+    URL:"https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code"
   }
 }
