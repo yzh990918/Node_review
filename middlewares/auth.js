@@ -2,7 +2,13 @@ const basicAuth = require('basic-auth')
 const jwt = require('jsonwebtoken')
 const { ForbidenException } = require('../core/http-execption')
 class Auth {
-  constructor() {}
+  constructor(level) {
+    // 定义级别
+    this.level = level || 1
+    Auth.USER = 8
+    Auth.ADMIN = 16
+    Auth.SUPER_ADMIN = 32
+  }
   //!  获取属性，不是方法
   get m() {
     return async (ctx, next) => {
@@ -23,6 +29,9 @@ class Auth {
           errMsg = 'token令牌已经过期'
         }
         throw new ForbidenException(errMsg)
+      }
+      if(decode.scope < this.level){
+        throw new ForbidenException('权限不足')
       }
       ctx.auth = {
         uid: decode.uid,

@@ -430,7 +430,7 @@ create table 表名(
 
 常见类型
 
-![1585018919602](C:\Users\努力中的杨先生\AppData\Roaming\Typora\typora-user-images\1585018919602.png)
+![](https://image.yangxiansheng.top/img/1585018919602.png?imagelist)
 
 
 
@@ -653,7 +653,7 @@ User.init({
 
 启动项目, sequelize会创建一张`user`表
 
-![1584979877301](C:\Users\努力中的杨先生\AppData\Roaming\Typora\typora-user-images\1584979877301.png)
+![](https://image.yangxiansheng.top/img/1584979877301.png?imagelist)
 
 
 

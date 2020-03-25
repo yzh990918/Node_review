@@ -8,7 +8,7 @@ const { LoginValidator } = require('../validator/validator')
 const { LoginExecption } = require('../../core/http-execption')
 const { LoginType } = require('../../config/config')
 const { User } = require('../models/user')
-
+const {Auth} = require('../../middlewares/auth')
 router.post('/token', async ctx => {
   const v = await new LoginValidator().validate(ctx)
   //  校验登陆账号和密码
@@ -32,7 +32,7 @@ router.post('/token', async ctx => {
 async function emailLogin(account, secret) {
   // const user = await User.vertifyEmailLogin(account,secret)
   const user = await vertifyEmail(account, secret)
-  return (token = generateToken(user.id, 2))
+  return (token = generateToken(user.id, Auth.USER))
 }
 async function vertifyEmail(account, secret) {
   const user = await User.findOne({

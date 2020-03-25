@@ -8,7 +8,7 @@ const {Auth} = require('../../middlewares/auth')
 const { PositiveIntegerValidator } = require('../validator/validator')
 
 //  使用用户权限校验中间价 必须放在路由中间件前面
-router.get('/latest',new Auth().m, (ctx, next) => {
+router.get('/latest',new Auth(10).m, (ctx, next) => {
   ctx.body = ctx.auth.uid
   // // 路径携带参数
   // const path = ctx.params
