@@ -20,7 +20,7 @@ class ParameterException extends HttpExecption {
 class Success extends HttpExecption{
   constructor(msg,code,errorCode){
     super()
-    this.msg = '注册成功',
+    this.msg = msg|| '操作成功',
     this.code = code || 200,
     this.errorCode = errorCode || 0
   }
@@ -52,4 +52,14 @@ class GetOpenidExecption extends HttpExecption{
     this.errorCode = 10004
   }
 }
-module.exports = { HttpExecption, ParameterException ,Success,LoginExecption, ForbidenException,GetOpenidExecption}
+
+
+class LikeException extends HttpExecption{
+  constructor(msg,code,errorCode){
+    super()
+    this.msg = msg || '点赞失败'
+    this.code = 403
+    this.errorCode =  10005
+  }
+}
+module.exports = { HttpExecption, ParameterException ,Success,LoginExecption, ForbidenException,GetOpenidExecption,LikeException}

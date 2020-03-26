@@ -1,12 +1,12 @@
 const { LinValidator, Rule } = require('../../core/lin-validator-v2')
 const {User} = require('../models/user')
-const {LoginType} = require('../../config/config')
+const {ArtType} = require('../../config/config')
 class PositiveIntegerValidator extends LinValidator {
   constructor() {
     super()
     //  使用lin-validator校验规则 三个参数 规则，返回提示信息，附加参数
     //  要与路由的参数信息一一对应 数组形式
-    this.id = [new Rule('isInt', '参数必须是正整数', { min: 1 })]
+    this.art_id = [new Rule('isInt', '参数必须是正整数', { min: 1 })]
   }
 }
 
@@ -97,4 +97,19 @@ class Tokenvalidator extends LinValidator{
     ]
   }
 }
-module.exports = { PositiveIntegerValidator ,RegisterValidator, LoginValidator, Tokenvalidator}
+ function checkType(params){
+  const type = params.body.type
+  if(!type){
+    throw new Error('type是必填参数')
+  }
+  if(!ArtType.isThisType(type)){
+    throw new Error('请填写正确的type类型')
+  }
+}
+class LikeValidator extends PositiveIntegerValidator{
+  constructor(){
+    super()
+    this.validateType = checkType
+  }
+}
+module.exports = { PositiveIntegerValidator ,RegisterValidator, LoginValidator, Tokenvalidator, LikeValidator}

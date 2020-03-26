@@ -12,11 +12,19 @@ const LoginType = {
   USER_PHONE:102,
   isThisType
 }
+const ArtType = {
+  MOVIE:100,
+  MUSIC:200,
+  SENTENCE:300,
+  BOOK:400,
+  isThisType
+}
 
 module.exports = {
   // 开发环境
   environment: 'dev',
   LoginType,
+  ArtType,
   database: {
     dbName: 'koa',
     host: 'localhost',
