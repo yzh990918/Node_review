@@ -20,7 +20,7 @@ router.post('/register',async(ctx)=>{
     email:v.get('body.email')
   }
  await User.create(user)
- throw new Success()
+ throw new Success('注册账号成功')
 })
 
 

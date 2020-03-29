@@ -42,5 +42,9 @@ module.exports = {
     appId:"wxdcb143e3cf5afacd",
     appSecret:"8a75dfade75690295ab94f82fc25c292",
     URL:"https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code"
+  },
+  yushu:{
+    detailURL:"http://t.yushu.im/v2/book/id/%s",
+    searchURL:"http://t.yushu.im/v2/book/search?q=%s&start=%s&count=%s"
   }
 }

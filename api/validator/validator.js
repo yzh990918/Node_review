@@ -77,12 +77,13 @@ class LoginValidator extends LinValidator{
       new Rule('isOptional'),
       new Rule('isLength','密码不符合规范',{min:6})
     ]
+    // this.validateloginType =checkType
   }
-  validateLOginType(params){
+  validateLoginType(params){
     if(!params.body.loginType){
       throw new Error('请传入登录方式')
     }
-    if(!LoginType.isThisType(params.body.loginType)){
+    if(!global.config.LoginType.isThisType(params.body.loginType)){
       throw new Error('type参数不合法')
     }
   }
@@ -98,10 +99,12 @@ class Tokenvalidator extends LinValidator{
   }
 }
  function checkType(params){
-  const type = params.body.type
+  let type = params.body.type || params.path.type
   if(!type){
     throw new Error('type是必填参数')
   }
+  // 通过 params.path.type 或者 params.query.type 拿到的参数默认是个字符串需要转型 但这里不能对路由里validate达到的参数进行更改 强行更改 this.parsed.path.type = type
+  type = parseInt(type)
   if(!ArtType.isThisType(type)){
     throw new Error('请填写正确的type类型')
   }
@@ -112,4 +115,46 @@ class LikeValidator extends PositiveIntegerValidator{
     this.validateType = checkType
   }
 }
-module.exports = { PositiveIntegerValidator ,RegisterValidator, LoginValidator, Tokenvalidator, LikeValidator}
+
+class IndexValidator extends LinValidator {
+  constructor(){
+    super()
+   this.index = [
+     new Rule('isInt','必须是正整数',{min:1})
+   ]
+  }
+}
+
+class ClassicValidator extends LinValidator{
+  constructor(){
+    super()
+    this.id = [
+      new Rule('isInt','必须是正整数',{min:1})
+    ]
+    this.validateType = checkType 
+  }
+}
+
+class SearchValidator extends LinValidator {
+  constructor(){
+    super()
+    this.q = [
+      new Rule('isLength','搜索关键词不能为空',{min:1})
+    ]
+    this.start= [
+      new Rule('isInt','',{
+        min:0,
+        max:60000
+      }),
+      new Rule('isOptional',0)
+    ]
+    this.count = [
+      new Rule('isInt','',{
+        min:1,
+        max:20
+      }),
+      new Rule('isOptional',20)
+    ]
+  }
+}
+module.exports = { PositiveIntegerValidator ,RegisterValidator, LoginValidator, Tokenvalidator, LikeValidator, IndexValidator, ClassicValidator, SearchValidator}

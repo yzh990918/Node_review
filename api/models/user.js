@@ -6,23 +6,6 @@ const {LoginExecption} = require('../../core/http-execption')
 
 
 class User extends Model {
-      // // 校验邮箱登陆方法
-      // static async vertifyEmailLogin(account,secret){
-      //   const user = await User.findOne({
-      //     where:{
-      //       email:account
-      //     }
-      //   })
-      //   if(!user){
-      //     throw new LoginExecption('邮箱不存在')
-      //   }
-      //   //  比较密码与原始密码
-      //   const corret = bcryptjs.compareSync(secret,user.password)
-      //   if(corret === false){
-      //     throw new LoginExecption('密码不正确,授权失败')
-      //   }
-      //   return user
-      // }
       static async getOpenIDUser(openid){
         const user = await User.findOne({
           where:{

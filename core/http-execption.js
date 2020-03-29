@@ -62,4 +62,13 @@ class LikeException extends HttpExecption{
     this.errorCode =  10005
   }
 }
-module.exports = { HttpExecption, ParameterException ,Success,LoginExecption, ForbidenException,GetOpenidExecption,LikeException}
+
+class NotFoundException extends HttpExecption {
+  constructor(msg,code,errorCode){
+    super()
+    this.msg = msg || '找不到资源',
+    this.code = 404
+    this.errorCode = 10006
+  }
+}
+module.exports = { HttpExecption, ParameterException ,Success,LoginExecption, ForbidenException,GetOpenidExecption,LikeException, NotFoundException}

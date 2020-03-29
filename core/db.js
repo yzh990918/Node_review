@@ -27,7 +27,16 @@ const sequelize = new Sequelize(dbName, user, password, {
     updatedAt: 'updated_at',
     // 不使用驼峰式命令规则，这样会在使用下划线分隔
     // 这样 updatedAt 的字段名会是 updated_at
-    underscored: true
+    underscored: true,
+    scopes:{
+      // 全局的预定义 sql语句
+      bh:{
+        // 全局的查询的返回字段不包括这三个字段
+        attributes:{
+          exclude:['created_at','deleted_at','updated_at','deletedAt']
+        }
+      }
+    }
   }
 })
 // 同步Model到数据库

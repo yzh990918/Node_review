@@ -21,7 +21,7 @@ router.post('/token', async ctx => {
     case LoginType.USER_EMAIL:
       token = await emailLogin(account, secret)
       break
-    case LoginType.USER_MINI:
+    case 100:
       token = await WxManager.codeTotoken(account)
       break
     default:
