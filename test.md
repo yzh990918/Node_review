@@ -1,72 +1,6 @@
+### 基础
 
-<p>
-<img src="https://user-gold-cdn.xitu.io/2019/12/23/16f3031b3afaad3f?imageView2/1/w/1304/h/734/q/85/format/webp/interlace/1" />
-</p>
-<h1 align="center">Welcome to Best Node Practice </h1>
-<p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
-    <img src="https://img.shields.io/badge/koa-2.7.0-blue.svg" />
-  <img src="https://img.shields.io/badge/jsonwebtoken-8.4.0-blue.svg" />
-    <img src="https://img.shields.io/badge/validator-10.11.0-blue.svg" />
-  <img src="https://img.shields.io/badge/node-%3E%3D%206.0.0-blue.svg" />
-  <img src="https://img.shields.io/badge/npm-%3E%3D%203.0.0-blue.svg" />
-  <img src="https://img.shields.io/badge/axios-0.18.0-blue.svg" />
-
-  <a href="https://github.com/251205668/Node_review/blob/master/LICENSE" target="_blank">
-    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-blue.svg" />
-  </a>
-</p>
-
-> Koa framework foundation for node.js, a tutorial for building the restfuAPI
-
-## Getting started
-
-```sh
-# clone the Project
-git clone https://github.com/251205668/Node_review.git
-
-# enter the project directory
-cd Node_review
-
-# install dependency
-npm install
-
-# develop
-npm run dev
-
-# test
-Listening the 3000 port
-
-```
-## Features
-
-- middlewares
-  - Global exception handling
-  - JWT token validation
-  - Token does not sense refresh
-- classic journals
-  - Get the latest journals
-  - Get the next issue of the journal
-  - Get the last issue of the journal
-  - For details of a particular issue
-  - Get the thumb up information
-  - Get the journals I liked
-- Book
-  - Get a list of popular books
-  - Get book reviews
-  - Get the book thumb up information
-  - A new comment
-  - Get hot search keywords
-  - Books retrieval
-  - Get book details
-- favor
-  - give a like
-  - Cancel the thumb up
-
-## How It work
-### Basic
-
-Write the most basic code for an API
+编写一个接口的最基本代码
 
 ```js
 const koa = require('koa')
@@ -86,10 +20,11 @@ app.listen(3000,()=>{
 })
 ```
 
-#### middleware
-The middleware sends functions called by HTTP, one instance can define multiple middleware, and the middleware call always returns `promise`
+#### 中间件
 
-`app.use`register the middleware。`ctx`contents，`next`next middleware
+中间件-发送http调用的函数，一个实例可以定义多个中间件，中间件调用总是返回`promise`
+
+`app.use`注册中间件。`ctx`上下文，`next`下一个中间件
 
 ```js
 // 中间件--就是函数
@@ -103,8 +38,8 @@ app.use((ctx,next)=>{
 })
 ```
 
-Passing parameters
-By mounting to CTX, the onion model is first guaranteed
+传递参数
+通过挂载到ctx传参,首先要保证洋葱模型
 
 ```js
 app.use(async(ctx,next)=>{
@@ -120,12 +55,12 @@ app.use(async(ctx,next)=>{
 // 打印出dom结构，实现了传参
 ```
 
-#### The onion model
+#### 洋葱模型
 
-Execute on fun1 and then execute the middleware function under fun1.You can determine whether the function is fully executed, with the middleware function as the dividing line
+先执行fun1上 再执行中间件函数 在执行fun1下。可以判断函数是否完全执行，以中间件函数为分界线
 ![](https://image.yangxiansheng.top/img/QQ截图20200321195714.png?imagelist)
 
-Simple example:
+简单的例子:
 
 ```js
 app.use(async(ctx,next)=>{
@@ -139,14 +74,14 @@ app.use(async(ctx,next)=>{
 })
 ```
 
-use async,await to let `promise` sequentially，Call to order:
-fun1()TOP ====> fun2() ====> fun1 Bottom
+使用async,await强制promise同步调用化，调用顺序
+fun1() ====> fun2() ====> fun1下
 
 #### async await
 
-await Features:
+await特性:
 
-- evaluation
+- 求值
   await 理解为计算`promise`的值,使用await使用一定要在function前加上`async`，也可以对表达式求值。使用async,**await一定可以使中间件保持洋葱模型**。
 
 ```js
@@ -163,8 +98,8 @@ app.use(async(ctx,next)=>{
 // 1 3 2
 ```
 
-- Blocking threads
-    A common asynchronous call: 'to the resource read file operation database send http`    
+- 阻塞线程
+    常见的异步调用:`对资源 读文件 操作数据库 发送http`    
 
 ```js
 //默认异步调用
@@ -189,7 +124,7 @@ app.use(async(ctx,next)=>{
 })
 // 打印 1 res 2
 ```
-> Limited energy, not translated for the time being
+
 #### 路由
 
 初级路由判断 `ctx.path`返回路由,`ctx.method`返回调用方法，`ctx.body`定义返回内容
@@ -1730,36 +1665,3 @@ _request(url, resolve, reject, data = {}, method = 'GET', noRefetch = false) {
 
 ```
 
-
-## Author
-
-👤 **努力中的杨先生**
-
-* Website: https://me.yangxiansheng.top/
-* Github: [@251205668](https://github.com/251205668)
-* LinkedIn: [@https:\/\/github.com\/251205668](https://linkedin.com/in/https:\/\/github.com\/251205668)
-
-## 🤝 Contributing
-
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/251205668/Node_review/issues). You can also take a look at the [contributing guide](https://github.com/251205668/Node_review/issues).
-
-## Show your support
-
-Give a ⭐️ if this project helped you!
-
-<a href="https://www.patreon.com/努力中的杨先生">
-  <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
-</a>
-
-## Thanks
-
-Thanks for the explanation of node. js course given by the teacher `七月`, whose rigor of the course and exception handling of the project are all worthy of learning, which enabled me to acquire a lot of knowledge of Node and make my understanding of javascript to a higher level.Thanks!!
-
-Here are the coruse of the project :[course](https://coding.imooc.com/class/342.html)
-
-![](https://image.yangxiansheng.top/img/QQ截图20200330215308.png?imagelist)
-
-## 📝 License
-
-Copyright © 2020 [努力中的杨先生](https://github.com/251205668).<br />
-This project is [MIT](https://github.com/251205668/Node_review/blob/master/LICENSE) licensed.
