@@ -1,5 +1,5 @@
 
-<p>
+<p align="center">
 <img src="https://user-gold-cdn.xitu.io/2019/12/23/16f3031b3afaad3f?imageView2/1/w/1304/h/734/q/85/format/webp/interlace/1" />
 </p>
 <h1 align="center">Welcome to Best Node Practice </h1>
