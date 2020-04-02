@@ -46,5 +46,8 @@ module.exports = {
   yushu:{
     detailURL:"http://t.yushu.im/v2/book/id/%s",
     searchURL:"http://t.yushu.im/v2/book/search?q=%s&start=%s&count=%s"
+  },
+  news:{
+    URL:"https://pacaio.match.qq.com/irs/rcd?cid=56&ext=%s&token=c786875b8e04da17b24ea5e332745e0f&num=%s&expIds=20190106A13PFT%7C20190108A04MLS&page=%s"
   }
 }

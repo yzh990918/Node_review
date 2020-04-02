@@ -1,6 +1,8 @@
 const { LinValidator, Rule } = require('../../core/lin-validator-v2')
 const {User} = require('../models/user')
 const {ArtType} = require('../../config/config')
+const axios = require('axios')
+
 class PositiveIntegerValidator extends LinValidator {
   constructor() {
     super()
@@ -157,4 +159,48 @@ class SearchValidator extends LinValidator {
     ]
   }
 }
-module.exports = { PositiveIntegerValidator ,RegisterValidator, LoginValidator, Tokenvalidator, LikeValidator, IndexValidator, ClassicValidator, SearchValidator}
+class NewsValidator extends LinValidator {
+  constructor(){
+    super()
+    this.ext = [
+      new Rule('isLength','ext是必填参数',{min:1})
+    ]
+    this.page = [
+      new Rule('isInt','',{
+        min:0
+      }),
+      new Rule('isOptional',0)
+    ]
+    this.num = [
+      new Rule('isInt','',{
+        min:1
+      }),
+      new Rule('isOptional',20)
+    ]
+  }
+}
+// async function getlatestid (){
+//   let defaultStart =await axios.get('https://unidemo.dcloud.net.cn/api/news?column=id%2Cpost_id%2Ctitle%2Cauthor_name%2Ccover%2Cpublished_at')
+// return defaultStart.data[0].id
+// }
+class NewsListValidator extends LinValidator {
+  constructor(){
+    super()
+ 
+    this.start= [
+      new Rule('isInt','',{
+        min:0,
+        max:100000000
+      }),
+      new Rule('isOptional')
+    ]
+    this.count = [
+      new Rule('isInt','',{
+        min:1,
+        max:100
+      }),
+      new Rule('isOptional',20)
+    ]
+  }
+}
+module.exports = { PositiveIntegerValidator ,RegisterValidator, LoginValidator, Tokenvalidator, LikeValidator, IndexValidator, ClassicValidator, SearchValidator, NewsValidator, NewsListValidator}
