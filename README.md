@@ -1,9 +1,9 @@
 
-<p>
+<p align="center">
 <img src="https://user-gold-cdn.xitu.io/2019/12/23/16f3031b3afaad3f?imageView2/1/w/1304/h/734/q/85/format/webp/interlace/1" />
 </p>
 <h1 align="center">Welcome to Best Node Practice </h1>
-<p>
+<p align ="center">
   <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
     <img src="https://img.shields.io/badge/koa-2.7.0-blue.svg" />
   <img src="https://img.shields.io/badge/jsonwebtoken-8.4.0-blue.svg" />
