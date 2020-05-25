@@ -1,19 +1,33 @@
-function fun1() {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const a = Math.random
-      if (a < 0.5) {
-        reject('error')
+const axios = require('axios')
+function insertMany(collection,arr){
+  return new Promise((resolve,reject)=>{
+    // 连接数据库
+    var MongClient = require('mongodb').MongoClient
+    var url="mongodb://localhost:27017/"
+    MongClient.connect(url,{useNewUrlParser:true,useUnifiedTopology:true},(error,db)=>{
+      // 成功连接回调
+      if(error){
+        throw error
       }
-    }, 1000)
+      // 获取数据库对象 并插入集合
+      var dbo = db.db("lol")
+      dbo.collection(collection).insertMany(arr,(err,res)=>{
+        if(err){
+          reject(err)
+        }
+        console.log(res.insertedCount)
+        db.close()
+        resolve()
+      })
+    })
   })
 }
-async function fun2() {
-  try {
-    await fun1()
-  } catch (error) {
-    console.log('error')
-  }
+
+async function getHeroList(){
+  let result = await axios.get('https://game.gtimg.cn/images/lol/act/img/js/heroList/hero_list.js?v=28')
+  await insertMany("heroList",result.data.hero)
+  return result.data.hero
 }
 
-fun2()
+getHeroList()
+

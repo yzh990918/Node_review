@@ -1,4 +1,3 @@
-
 <p align="center">
 <img src="https://user-gold-cdn.xitu.io/2019/12/23/16f3031b3afaad3f?imageView2/1/w/1304/h/734/q/85/format/webp/interlace/1" />
 </p>
@@ -39,6 +38,7 @@ npm run dev
 Listening the 3000 port
 
 ```
+
 ## Features
 
 - middlewares
@@ -72,35 +72,36 @@ Write the most basic code for an API
 
 ```js
 const koa = require('koa')
-const Router =require('koa-router')
+const Router = require('koa-router')
 
 const router = new Router()
 
 const app = new koa()
 
-router.get('/classic/latest',(ctx,next)=>{
-  ctx.body ={key:"classic"}
+router.get('/classic/latest', (ctx, next) => {
+  ctx.body = { key: 'classic' }
 })
 // router.routes() 注册中间件
 app.use(router.routes())
-app.listen(3000,()=>{
+app.listen(3000, () => {
   console.log('http监听端口3000')
 })
 ```
 
 #### middleware
+
 The middleware sends functions called by HTTP, one instance can define multiple middleware, and the middleware call always returns `promise`
 
 `app.use`register the middleware。`ctx`contents，`next`next middleware
 
 ```js
 // 中间件--就是函数
-app.use((ctx,next)=>{
+app.use((ctx, next) => {
   // ctx 上下文
   console.log('七月')
   next()
 })
-app.use((ctx,next)=>{
+app.use((ctx, next) => {
   console.log('八月')
 })
 ```
@@ -109,14 +110,14 @@ Passing parameters
 By mounting to CTX, the onion model is first guaranteed
 
 ```js
-app.use(async(ctx,next)=>{
-    await next()
-    console.log(ctx,r)
+app.use(async (ctx, next) => {
+  await next()
+  console.log(ctx, r)
 })
 
-app.use(async(ctx,next)=>{
-    ctx.r = await axios.get('www.baidu.com').data
-    await next()
+app.use(async (ctx, next) => {
+  ctx.r = await axios.get('www.baidu.com').data
+  await next()
 })
 
 // 打印出dom结构，实现了传参
@@ -130,14 +131,14 @@ Execute on fun1 and then execute the middleware function under fun1.You can dete
 Simple example:
 
 ```js
-app.use(async(ctx,next)=>{
-    fun1()
-    await next()
-    funt1下()
+app.use(async (ctx, next) => {
+  fun1()
+  await next()
+  funt1下()
 })
 
-app.use(async(ctx,next)=>{
-    funt2()
+app.use(async (ctx, next) => {
+  funt2()
 })
 ```
 
@@ -149,24 +150,24 @@ fun1()TOP ====> fun2() ====> fun1 Bottom
 await Features:
 
 - evaluation
-  await 理解为计算`promise`的值,使用await使用一定要在function前加上`async`，也可以对表达式求值。使用async,**await一定可以使中间件保持洋葱模型**。
+  await 理解为计算`promise`的值,使用 await 使用一定要在 function 前加上`async`，也可以对表达式求值。使用 async,**await 一定可以使中间件保持洋葱模型**。
 
 ```js
-app.use(async(ctx,next)=>{
-    console.log(1)
-    const a = await next()
-    console.log(2)
+app.use(async (ctx, next) => {
+  console.log(1)
+  const a = await next()
+  console.log(2)
 })
 
-app.use(async(ctx,next)=>{
-    console.log(3)
+app.use(async (ctx, next) => {
+  console.log(3)
 })
 
 // 1 3 2
 ```
 
 - Blocking threads
-    A common asynchronous call: 'to the resource read file operation database send http`    
+  A common asynchronous call: 'to the resource read file operation database send http`
 
 ```js
 //默认异步调用
@@ -191,16 +192,18 @@ app.use(async(ctx,next)=>{
 })
 // 打印 1 res 2
 ```
+
 > Limited energy, not translated for the time being
+
 #### 路由
 
 初级路由判断 `ctx.path`返回路由,`ctx.method`返回调用方法，`ctx.body`定义返回内容
 
 ```js
-app.use(async(ctx,next)=>{
-    if(ctx.path ==='/clasic/latest' && ctx.method ==='GET'){
-        ctx.body =  {key:"clasic"}
-    }
+app.use(async (ctx, next) => {
+  if (ctx.path === '/clasic/latest' && ctx.method === 'GET') {
+    ctx.body = { key: 'clasic' }
+  }
 })
 ```
 
@@ -216,21 +219,20 @@ router.get('/',(ctx,next)=>{
 app.use(router.routes())
 ```
 
-nodemon 自动重启node服务
+nodemon 自动重启 node 服务
 全局启动`nodemon app.js`
 
-**一键导入module `require-directory`轮子**
+**一键导入 module `require-directory`轮子**
 
 ```js
-
 const requireDirectory = reuire('require-directory')
 
-requreDirectory(module,'./api/v1',visit:function)
+requreDirectory(module, './api/v1', (visit: function))
 
-function whenExportModule(obj){
-    if(obj instanceof Router){
-        app.use(obj.routes())
-    }
+function whenExportModule(obj) {
+  if (obj instanceof Router) {
+    app.use(obj.routes())
+  }
 }
 ```
 
@@ -239,30 +241,30 @@ function whenExportModule(obj){
 创建 core.js
 
 ```js
-const Router  = require('koa-router')
+const Router = require('koa-router')
 const requireDirectory = require('require-dicectory')
 
-// 导入全部模块前判断 是否是Router的对象 
-class InitManger{
-    static initcore(app){
-        InitManager.app = app
-        InitManager.InitLoadRouters()
-    }
-    static InitLoadRouters(){
+// 导入全部模块前判断 是否是Router的对象
+class InitManger {
+  static initcore(app) {
+    InitManager.app = app
+    InitManager.InitLoadRouters()
+  }
+  static InitLoadRouters() {
     const path = `${process.cwd()}/api/v1`
-        requireDirectory(module,path,{
-            visit:whenLoadrouters
-        })
-        function whenLoadrouters(obj){
-            if(obj instanceof Router){
-              InitManger.app.use(obj.routes())
-            }
-        }
+    requireDirectory(module, path, {
+      visit: whenLoadrouters,
+    })
+    function whenLoadrouters(obj) {
+      if (obj instanceof Router) {
+        InitManger.app.use(obj.routes())
+      }
     }
+  }
 }
 ```
 
-app.js引入
+app.js 引入
 
 ```js
 const IniManager = require('core.js')
@@ -271,8 +273,6 @@ InitManager.initcore(app)
 app.listen(3000)
 ```
 
-
-
 #### 校验处理
 
 ###### 获取参数
@@ -280,26 +280,26 @@ app.listen(3000)
 假设访问的路由地址为`localhost:3000/v1/3/classic/latest?password=123` header:`token:1111` ,body:`{"key":"localhost"}`
 
 ```js
-router.get('/v1/:id/classic/latest',(ctx,next)=>{
-    // 获取url参数
-    const params = ctx.params
-    // 获取query 
-    const query = ctx.request.query
-    // 获取token
-    const query = ctx.request.header
-    // 获取访问时内容
-    const body = ctx.request.body
-    ctx.body={key:"classic"}
+router.get('/v1/:id/classic/latest', (ctx, next) => {
+  // 获取url参数
+  const params = ctx.params
+  // 获取query
+  const query = ctx.request.query
+  // 获取token
+  const query = ctx.request.header
+  // 获取访问时内容
+  const body = ctx.request.body
+  ctx.body = { key: 'classic' }
 })
 ```
 
 ###### 异常处理
 
-设置全局返回的状态码   **异常分为：`已知异常`   `未知异常`**
+设置全局返回的状态码 **异常分为：`已知异常` `未知异常`**
 
 ```js
-message
-error_code
+msg
+code
 request_url
 HTTP status code 2xx 4xx 5xx
 常见Http状态码
@@ -313,89 +313,92 @@ HTTP status code 2xx 4xx 5xx
 504 '服务器超时'
 ```
 
-
-
 **全局异常处理**
 
-定义一个`execption`类继承`Error`,然后抛出异常时实例化，传递参数，打印全局异常返回json
+定义一个`execption`类继承`Error`,然后抛出异常时实例化，传递参数，打印全局异常返回 json
 
-- 创建Http-execption.js
+- 创建 Http-execption.js
 
-   ```js
-   class Httpexecption extends Errror{
-      // 定义构造函数
-       constructor(msg="服务器异常",code=400,errorCode=10001){
-           super()
-           this.msg = msg
-           this.code = code
-           this.errorCode = 10001
-       }
-   }
-   
-   class Paramexecption extends Httpexecption{
-       constructor(msg,code,errCode){
-           super()
-           this.msg = msg || '参数错误'
-           this.code = 400
-           this.errorCode = 10000
-       }
-       
-   }
-   module.exports = {
-       Httpexecption,
-       Paramexecption
-   }
-   ```
+  ```js
+  class Httpexecption extends Errror {
+    // 定义构造函数
+    constructor(msg = '服务器异常', code = 500, errorCode = 9999) {
+      super()
+      this.msg = msg
+      this.code = code
+      this.errorCode = 9999
+    }
+  }
 
-- 创建全局异常处理中间件
+  class Paramexecption extends Httpexecption {
+    constructor(msg, code, errCode) {
+      super()
+      this.msg = msg || '参数错误'
+      this.code = 400
+      this.errorCode = 10000
+    }
+  }
+  module.exports = {
+    Httpexecption,
+    Paramexecption,
+  }
+  ```
+  - 创建全局异常处理中间件(整合token鉴权)  
 
-   ```js
-   const {Httpexecption} = require('Http-execption')
-   
-   const execption = async(ctx,next){
-       try{
-           await next()
-       }catch(error){
-           if(error instanceof Httpexecption){
-               ctx.body = {
-                   msg: error.msg,
-                   error_code:error.errorCode,
-                   request:`${ctx.method} ${ctx.path}`
-               }
-           }
-           
-       }
-   }
-   
-   module.exports=execption  // app.js注册该中间件
-   ```
-
-- 在定义路由时抛出异常
-
-   ```js
-   const {Paramexecption} = require('Http-execption')
-   router.get('/latest',(ctx,next)=>{
-       const query = ctx.request.query
-       if(!query){
-           const error = new Paramexecption()
-           thorw error
+> 前提是在`app.js`中引入`koa-jwt`鉴权路由,鉴权`token`,异常判断通常是第一个中间件
+  
+  统一异常返回格式
+  
+  ```json
+  {
+    "msg":"错误信息",
+    "code":999,
+    "request":"HttpRequest.method/request.path"
+  }
+  ```
+  
+  ```js
+  const {HttpException} =require('Http-exception')
+  const exception = async(ctx,next){
+    try{
+      await next()
+    }catch(error){
+      // 处理token异常 
+      //处理Httpexception,处理位置异常
+      if(error.status === 401){
+        ctx.status = 401
+        ctx.body={
+          msg:"token令牌不合法",
+          code:401,
+          request:`${ctx.method}${ctx.path}`
+        }
+      }else{
+        // 已知异常
+        const isHttpException = error instanceof HttpException
+        if(isHttpException){
+          ctx.status = error.code
+          ctx.body = {
+            msg:error.msg,
+            code:error.errorCode,
+            request:`${ctx.method}${ctx.path}`
+          }
+        }else{
+          //未知异常
+          ctx.status = 500
+          ctx.body = {
+            msg:"未知异常",
+            code:999,
+            request:`${ctx.method}${ctx.path}`
+          }
+        }
       }
-   })
-   ```
 
-- 未知异常
+    }
+  }
+  ```
 
-   ```js
-   else{
-         ctx.body = {
-           msg:"未知异常发生",
-           erro_code:999,
-           request:`${ctx.method} ${ctx.path}`
-         }
-         ctx.status = 500
-       }
-     }
-   ```
+
+
 
 ###### 参数校验
 
@@ -406,13 +409,13 @@ HTTP status code 2xx 4xx 5xx
 ```js
 const {Linvalidator,Rule} from 'Lin-validator.js'
 
-// 校验正整数 
+// 校验正整数
 class PositiveIntegerValidator extends Linvalidator{
     constructor(){
        super()
     //  使用lin-validator校验规则 三个参数 规则，返回提示信息，附加参数
     //  要与路由的参数信息一一对应 数组形式
-    this.id = [ 
+    this.id = [
       new Rule('isInt','参数必须是正整数',{min:1})
     ]
   }
@@ -421,47 +424,44 @@ class PositiveIntegerValidator extends Linvalidator{
 module.exports = {PositiveIntegerValidator}
 ```
 
-**第二步 引用校验器进行校验** (调用validate方法)
+**第二步 引用校验器进行校验** (调用 validate 方法)
 
 ```js
-const {PositiveIntegerValidator}  = require('validator.js')
+const { PositiveIntegerValidator } = require('validator.js')
 
-router.get('/classic/:id/latest',(ctx,next)=>{
-    const v = new PositiveIntegerValidator().validate(ctx)
+router.get('/classic/:id/latest', (ctx, next) => {
+  const v = new PositiveIntegerValidator().validate(ctx)
 })
 ```
 
-**使用校验器获参数 ** get方法
+**使用校验器获参数 ** get 方法
 
 ```js
 const param = ctx.params
-const v =new PositiveIntegerValidator().validate(ctx)
-const id = v.get('param.id')  // 自动将id 转换为整形
-// 如果不想转换  
-const id = v.get('param.id',parsed:false)
+const v = new PositiveIntegerValidator().validate(ctx)
+const id = v.get('param.id') // 自动将id 转换为整形
+// 如果不想转换
+const id = v.get('param.id', (parsed: false))
 ```
-
-
 
 <h4>配置开发环境的异常抛出</h4>
 由于我们捕获到的异常都去做了全局异常处理，导致某些异常无法判断， 所以定义config来配置开发环境
 
 ```js
-module.exports={
-    enviorment:"dev"
+module.exports = {
+  enviorment: 'dev',
 }
 ```
 
 在全局异常中间件,判断是否是开发环境,然后抛出异常
 
 ```js
-if(global.config.enviorment === 'dev'){
-    throw error
+if (global.config.enviorment === 'dev') {
+  throw error
 }
 ```
 
-
-#### sql复习
+#### sql 复习
 
 ###### 创建数据库
 
@@ -486,8 +486,6 @@ DROP DATABASE 数据库名
 3. 主键约束 PRIMARY KEY
 ```
 
-
-
 ```sql
 create table 表名(
 字段名 类型(长度) [约束],
@@ -498,8 +496,6 @@ create table 表名(
 常见类型
 
 ![](https://image.yangxiansheng.top/img/1585018919602.png?imagelist)
-
-
 
 ###### 删除表
 
@@ -571,7 +567,7 @@ select 列1 from 表名
 select 列.. from 表名 where 条件
 ```
 
-条件运算符  逻辑运算符
+条件运算符 逻辑运算符
 
 ```sql
 =  >  >=  <  <=  and  &&  or  not
@@ -615,15 +611,11 @@ select * from 表1,表2  where 表1.字段=表2.字段;  //隐式内连接,使
 select * from 表1 [inner] join 表2 on 表1.字段=表2.字段;  //显式内连接,如果是多张表，则一直在join..on后依次添加join..on即可,inner关键字可被省略
 ```
 
-
-
-
-
 #### sequlize(模型导入数据库)
 
-###### 初始化配置 
+###### 初始化配置
 
-> 以上配置都可以参考[sequelize文档]( https://sequelize.org/v5/index.html ) 或者[中文文档]( https://itbilu.com/nodejs/npm/V1PExztfb.html )
+> 以上配置都可以参考[sequelize 文档](https://sequelize.org/v5/index.html) 或者[中文文档](https://itbilu.com/nodejs/npm/V1PExztfb.html)
 
 第一步，定义数据库配置
 
@@ -631,26 +623,25 @@ config.js
 
 ```js
 module.exports = {
-    database:{
-        // 数据库名 主机号 端口 用户名 密码
-        dbName:"koa",
-        host:"localhost",
-        port:3306,
-        user:"root",
-        password:"wohenpi0918"
-        
-    }
+  database: {
+    // 数据库名 主机号 端口 用户名 密码
+    dbName: 'koa',
+    host: 'localhost',
+    port: 3306,
+    user: 'root',
+    password: 'wohenpi0918',
+  },
 }
 ```
 
-第二步，配置`sequelize`  更多配置参考 
-[API文档](https://itbilu.com/nodejs/npm/V1PExztfb.html)
+第二步，配置`sequelize` 更多配置参考
+[API 文档](https://itbilu.com/nodejs/npm/V1PExztfb.html)
 
 ```js
 const Sequelize = require('sequelize')
 const {dbName,host,port,user,password} = require('config.js')
 
-// 参数: 数据库名 用户名 密码 配置具体 
+// 参数: 数据库名 用户名 密码 配置具体
 const sequlize = new Sequelize(dbName,user,password.{
  	// 数据库类型
       dialect:'mysql',
@@ -674,7 +665,7 @@ const sequlize = new Sequelize(dbName,user,password.{
        underscored: true,
   }
       })
-      
+
    // 同步模型到数据库中
    sequelize.sync({
        // 是否强制更新 删除后直接覆盖数据表
@@ -685,48 +676,47 @@ module.exports = {sequelize}
 
 第三步,定义模型层
 
-model下创建user.js  更多定义方法 参考[数据类型]( https://sequelize.org/v5/manual/data-types.html )
+model 下创建 user.js 更多定义方法 参考[数据类型](https://sequelize.org/v5/manual/data-types.html)
 
 ```js
-const {sequelize} =require('db.js')
-const {Sequelize,Model} = require('sequelize')
+const { sequelize } = require('db.js')
+const { Sequelize, Model } = require('sequelize')
 
-class User extends Model{
-    
-}
+class User extends Model {}
 // 定义模型层
-User.init({
-  // 主键: 不能为空 不能重复
-  id:{
-    type:Sequelize.INTEGER,
-    primaryKey:true,
-    // 自动增长 id编号
-    autoIncrement:true
+User.init(
+  {
+    // 主键: 不能为空 不能重复
+    id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      // 自动增长 id编号
+      autoIncrement: true,
+    },
+    username: { type: Sequelize.STRING, unique: true },
+    password: Sequelize.STRING,
+    email: { type: Sequelize.STRING, unique: true },
+    openid: {
+      // 最大字符长度 64
+      type: Sequelize.STRING(64),
+      unique: true,
+    },
   },
-  username:{type:Sequelize.STRING,unique:true},
-  password:Sequelize.STRING,
-  email:{type:Sequelize.STRING,unique:true},
-  openid:{
-    // 最大字符长度 64
-    type:Sequelize.STRING(64),
-    unique:true
+  {
+    sequelize,
+    // 自定义表名  默认会以模型名为表名
+    tableName: 'user',
   }
-},{
-  sequelize,
-   // 自定义表名  默认会以模型名为表名
-  tableName:'user'
-})
+)
 ```
 
-启动项目, sequelize会创建一张`user`表
+启动项目, sequelize 会创建一张`user`表
 
 ![](https://image.yangxiansheng.top/img/1584979877301.png?imagelist)
 
+###### sequelize 相关 API
 
-
-###### sequelize相关API
-
-> sequelize大多数查询的API都是返回的pormise对象,所以定义模型方法时加上 `async`和`await`
+> sequelize 大多数查询的 API 都是返回的 pormise 对象,所以定义模型方法时加上 `async`和`await`
 
 ```js
 1. 定义模型  class A extends Model{}  A.unit({},{sequelize,tableName:"name"})
@@ -759,7 +749,7 @@ Model类API
         attr1:value,
         attr2:value
     }
-})   
+})
 这里可以使用到 大于,小于等`$gt` `lte`  `$or`
 Model.findAll({
   where: {
@@ -793,8 +783,8 @@ Model.findAll({
 13. upsert 创建或更新
 
 14. className.transition(async (t)=>{
-    ... 
-})  
+    ...
+})
  创建事务
  Modle类.transcation(async t =>{
      await Favor.create({
@@ -814,19 +804,17 @@ user.increment(['age', 'number'], {by:2}).then(function(user){
 
 ```
 
-
-
 #### 注册
 
 > 首先定义好模型 然后编写校验器 密码用盐加密，处理好异常
 
-###### 编写校验器  
+###### 编写校验器
 
 用户名: 用户名长度规范 唯一性规范
 
 密码: 正则表达式规范
 
-邮箱:  邮箱规范 唯一性规范
+邮箱: 邮箱规范 唯一性规范
 
 ```js
 const {User} = require('user.js')
@@ -869,29 +857,27 @@ class RegisterValidator extends Linvalidator{
 }
 ```
 
-###### 编写注册API  （标准流程）
+###### 编写注册 API （标准流程）
 
 ```js
 const Router = require('koa-router')
 const router = new Router({
-    // 添加前缀
-    prefix:'/v1/user'
+  // 添加前缀
+  prefix: '/v1/user',
 })
 
-router.post('/register',async(ctx)=>{
-    // 守门员 校验参数 只有当通过校验器才能插入模型数据
-    const v = await new RegisterValidator().validate(ctx)
-    // 获取通过校验的参数
-    const params = {
-        username:v.get('body.username'),
-        password:v.get('body.password1'),
-        email:v.get('body.email')
-    }
-    // 插入数据库  模型.create(参数列表)
-	await User.create(user)
-    
+router.post('/register', async (ctx) => {
+  // 守门员 校验参数 只有当通过校验器才能插入模型数据
+  const v = await new RegisterValidator().validate(ctx)
+  // 获取通过校验的参数
+  const params = {
+    username: v.get('body.username'),
+    password: v.get('body.password1'),
+    email: v.get('body.email'),
+  }
+  // 插入数据库  模型.create(参数列表)
+  await User.create(user)
 })
-
 ```
 
 ###### 明文加密
@@ -900,16 +886,16 @@ router.post('/register',async(ctx)=>{
 const bcryptjs = require('bcryptjs')
 //定义密码模型时加密
 User.init({
-    password:{
-        type:Sequeize.STRING,
-        set(val){
-            // 取盐 赋盐
-            const sault = bcryptjs.getSaltSync(10)
-            const pwd = bcryptjs.hashSync(val,sault)
-            // 将盐赋值
-            this.setDataValue('password',pwd)
-        }
-    }
+  password: {
+    type: Sequeize.STRING,
+    set(val) {
+      // 取盐 赋盐
+      const sault = bcryptjs.getSaltSync(10)
+      const pwd = bcryptjs.hashSync(val, sault)
+      // 将盐赋值
+      this.setDataValue('password', pwd)
+    },
+  },
 })
 ```
 
@@ -923,24 +909,24 @@ User.init({
 
 ```js
 // 定义一个判断方法 ,判断是否在这几个类型中
-function isInType(val){
-    for(let key in this){
-        if(this[key] === val){
-            return true
-        }
+function isInType(val) {
+  for (let key in this) {
+    if (this[key] === val) {
+      return true
     }
-    return false
+  }
+  return false
 }
 const LoginType = {
-    //  邮箱 手机号 小程序登录
-    USER_EMAIL:100,
-    USER_PHONE:101,
-    USER_MINI:102,
-    isInType
+  //  邮箱 手机号 小程序登录
+  USER_EMAIL: 100,
+  USER_PHONE: 101,
+  USER_MINI: 102,
+  isInType,
 }
 
 module.exports = {
-    LoginType
+  LoginType,
 }
 ```
 
@@ -953,31 +939,29 @@ module.exports = {
 **对`account`和`secret`进行校验,然后校验登录方式合法**
 
 ```js
-
-
-class Loginvalidator extends Linvalidator{
-    constructor(){
-        super()
-        this.account = [
-            new Rule('isLength',"账号不符合规范",{min:4,max:128})
-        ]
-        this.secret = [
-          new Rule =('isOptional'),
-          new Rule('isLength','密码长度必须大于6',{min:6})    
-        ]
+class Loginvalidator extends Linvalidator {
+  constructor() {
+    super()
+    this.account = [
+      new Rule('isLength', '账号不符合规范', { min: 4, max: 128 }),
+    ]
+    this.secret = [
+      (new Rule() = 'isOptional'),
+      new Rule('isLength', '密码长度必须大于6', { min: 6 }),
+    ]
+  }
+  validateLoginType(params) {
+    const type = params.body.loginType
+    if (!type) {
+      throw new Error('请传入登录方式')
     }
-    validateLoginType(params){
-        const type = params.body.loginType
-        if(!type){
-            throw new Error('请传入登录方式')
-        }
-     if(!global.config.LoginType.isInType(type)){
-            throw new Error('type参数不合法 ')
-        }
+    if (!global.config.LoginType.isInType(type)) {
+      throw new Error('type参数不合法 ')
     }
+  }
 }
 
-module.exports = {Loginvalidator}
+module.exports = { Loginvalidator }
 ```
 
 > isOptional 参数可以传可以不传
@@ -985,8 +969,8 @@ module.exports = {Loginvalidator}
 当参数通过校验器时, 定义方法判断传入的参数是否在数据库中存在
 
 ```js
-async function emailLogin (account,secret){
-    const user = await User.vertifyEmail(account,secret)
+async function emailLogin(account, secret) {
+  const user = await User.vertifyEmail(account, secret)
 }
 ```
 
@@ -1011,11 +995,9 @@ class User extends Model{
             throw 密码错误异常
         }
         return user
-    } 
+    }
 }
 ```
-
-
 
 模型定义完之后
 
@@ -1053,47 +1035,47 @@ appSecret
 ```
 
 ```js
-class wxManager{
-    static async openidTotoken(code){
-        // 拼接url
-        const url = util.format(URL,appId,appSecret,code)
-        const result = await axios.get(url)
-        if(result.status!==200){
-            throw new getOpenIDException()
-        }
-        if(result.data.errcode!==0){
-            throw new getOpenIDException('获取openID失败'+result.data.errcode)
-        }
-        // 成功后 查询数据库 然后插入数据库 再获取token
-        let user = User.getOpenIdUser(result.data.openid)
-        if(!user){
-           user = User.registerOpenId(result.data.openid)
-        }
-        let token = generate(user.id,Auth.USER)
+class wxManager {
+  static async openidTotoken(code) {
+    // 拼接url
+    const url = util.format(URL, appId, appSecret, code)
+    const result = await axios.get(url)
+    if (result.status !== 200) {
+      throw new getOpenIDException()
     }
+    if (result.data.errcode !== 0) {
+      throw new getOpenIDException('获取openID失败' + result.data.errcode)
+    }
+    // 成功后 查询数据库 然后插入数据库 再获取token
+    let user = User.getOpenIdUser(result.data.openid)
+    if (!user) {
+      user = User.registerOpenId(result.data.openid)
+    }
+    let token = generate(user.id, Auth.USER)
+  }
 }
 ```
 
-> **util.forma**t Node.js提供的util的API,可以将第一个参数中的占位符换成后面的参数 
+> **util.forma**t Node.js 提供的 util 的 API,可以将第一个参数中的占位符换成后面的参数
 >
-> **getOpenIdUser**   Model层中定义的静态方法 查询user
+> **getOpenIdUser** Model 层中定义的静态方法 查询 user
 >
-> **registerOpenId**  插入openid
+> **registerOpenId** 插入 openid
 >
-> Auth.USER  提前定义在Auth 获取令牌的class中的，表示权限的值 用户  只需要判断scope和传入的level值（当传入的level小于用户级别的scope时就可以获取token,反之就不可以）
+> Auth.USER 提前定义在 Auth 获取令牌的 class 中的，表示权限的值 用户 只需要判断 scope 和传入的 level 值（当传入的 level 小于用户级别的 scope 时就可以获取 token,反之就不可以）
 >
 > ```js
 > class Auth {
-> constructor(level){
+>   constructor(level) {
 >     this.level = level || 1
 >     Auth.USER = 8
 >     Auth.ADMIN = 16
 >     Auth.SUPER_ADMIN = 32
-> }
+>   }
 > }
 > ```
 
-**书写完微信登录获取openid之后，可以书写一个校验拿到的token的方法**
+**书写完微信登录获取 openid 之后，可以书写一个校验拿到的 token 的方法**
 
 ```js
 static verifyToken(token){
@@ -1106,13 +1088,11 @@ static verifyToken(token){
   }
 ```
 
-当前端从`Storage`里面拿出token,检验它的合法性，然后再继续走下去
+当前端从`Storage`里面拿出 token,检验它的合法性，然后再继续走下去
 
+###### 颁布令牌,获取 token
 
-
-###### 颁布令牌,获取token
-
-在获取`token`之前先了解`jwt`的主要API
+在获取`token`之前先了解`jwt`的主要 API
 
 ```js
 jwt.sign() // 生成令牌  需要传入参数:1.传入自定义信息(后面可封装在auth里) 2.secretKey秘钥(用户自定义) 3.配置（失效时间）
@@ -1123,7 +1103,7 @@ jwt.sign() // 生成令牌  需要传入参数:1.传入自定义信息(后面可
 
 
 jwt.verify() //校验令牌 如果token无效会抛出异常
-// 需要传入 token 秘钥 两个个参数  
+// 需要传入 token 秘钥 两个个参数
 最好是放在try catch中捕获异常
 ```
 
@@ -1131,39 +1111,37 @@ jwt.verify() //校验令牌 如果token无效会抛出异常
 
   ```js
   security = {
-      secretKey:'abcdefg',// 自定义
-      expiresIn:60*60 //令牌时效
+    secretKey: 'abcdefg', // 自定义
+    expiresIn: 60 * 60, //令牌时效
   }
   ```
 
 - 书写颁发令牌方法
 
   ```js
-  const generateToken = function(uid,scope){
-      const token= jwt.sign({uid,scope},security.secretKey,{expiresIn})
-      return token
+  const generateToken = function (uid, scope) {
+    const token = jwt.sign({ uid, scope }, security.secretKey, { expiresIn })
+    return token
   }
   ```
 
-- 登录时获取token
+- 登录时获取 token
 
   ```js
-  async function emailLogin(account,secret){
-      // user 登录时获
-  
-      
-      
-      const token = generate(user.id,2)
-      return token
+  async function emailLogin(account, secret) {
+    // user 登录时获
+
+    const token = generate(user.id, 2)
+    return token
   }
   ```
-  
+
   ```js
-   async function vertifyEmail(account, secret) {
+  async function vertifyEmail(account, secret) {
     const user = await User.findOne({
       where: {
-        email: account
-      }
+        email: account,
+      },
     })
     if (!user) {
       throw new LoginExecption('账号不存在')
@@ -1174,23 +1152,18 @@ jwt.verify() //校验令牌 如果token无效会抛出异常
     return user
   }
   ```
-  
-  
-  
-  
-
 
 #### 路由携带令牌校验
 
-想清楚三件事: 
+想清楚三件事:
 
-1. token约定放在`header`还是`body`中 
-2. 用什么方式来检验token是否合法
+1. token 约定放在`header`还是`body`中
+2. 用什么方式来检验 token 是否合法
 3. 校验令牌中间件放在什么位置
 
-> 具体思路：首先一般情况下token在HTTPBasicAuth规则中是放在header部分的，然后我们通过这种方式测试
+> 具体思路：首先一般情况下 token 在 HTTPBasicAuth 规则中是放在 header 部分的，然后我们通过这种方式测试
 >
-> 校验合法性，书写中间价时调用 `jwt.verify()`来检验合法token
+> 校验合法性，书写中间价时调用 `jwt.verify()`来检验合法 token
 >
 > 校验令牌必须放在路由中间件前面,因为是最高权重 只有放了权限才能进行后面
 
@@ -1222,19 +1195,17 @@ class Auth {
         // 下一个中间件执行
         await next()
     }
-    
+
 }
 ```
 
-> new Auth().m  这里 m并不是方法 是class里面属性 通过get获取  实则是个中间件函数
+> new Auth().m 这里 m 并不是方法 是 class 里面属性 通过 get 获取 实则是个中间件函数
 
-校验完令牌之后,在router.get('') 中间注册中间件 `new Auth().m`
+校验完令牌之后,在 router.get('') 中间注册中间件 `new Auth().m`
 
+#### 前端携带令牌(BasicAuth 方式) (API key 方式)
 
-
-#### 前端携带令牌(BasicAuth方式)  (API key方式)
-
-在发送HTTP请求时，加入这样的header
+在发送 HTTP 请求时，加入这样的 header
 
 ```js
 header:{
@@ -1250,33 +1221,33 @@ return 'Basic'+base64
 此时携带的令牌数据就可以传递
 
 ```js
-header:{
-    Authorization:封装的函数
+header: {
+  Authorization: 封装的函数
 }
 ```
 
-使用API key方式就不需要base64加密处理
+使用 API key 方式就不需要 base64 加密处理
 
 ```js
 // 拿到约定好放在header或者query的token
 class Auth {
-    get m(){
-        return async(ctx,next)=>{
-            const UserToken = ctx.request.header.token
-            if(!USerToken){
-                throw new token不合法异常
-            }
-            // 校验token合法性
-            try{
-                var decode = jwt.verify(UserToken,global.config.secretKey)
-            }catch(error){
-              if(error.name ='TokenExpiredError'){
-                  throw new Error('令牌过期')
-              }
-                throw new token不合法
-            }
+  get m() {
+    return async (ctx, next) => {
+      const UserToken = ctx.request.header.token
+      if (!USerToken) {
+        throw new token不合法异常()
+      }
+      // 校验token合法性
+      try {
+        var decode = jwt.verify(UserToken, global.config.secretKey)
+      } catch (error) {
+        if ((error.name = 'TokenExpiredError')) {
+          throw new Error('令牌过期')
         }
+        throw new token不合法()
+      }
     }
+  }
 }
 ```
 
@@ -1284,58 +1255,52 @@ class Auth {
 
 ```js
 wx.request({
-    url:'',
-    method:'POST',
-    header:{
-        token:wx.getStorageSync('token')
-    },
-    success:(res)=>{
-        console.log(res.data)
-    }
+  url: '',
+  method: 'POST',
+  header: {
+    token: wx.getStorageSync('token'),
+  },
+  success: (res) => {
+    console.log(res.data)
+  },
 })
 ```
 
-
-
-
-
-
-
- ### 具体业务
+### 具体业务
 
 首先先把数据表的概念分清
 
-- 业务表  ： 解决业务问题 抽象出来的，记录业务 比如说:一期又一期的期刊，存放他们不同的index来区分期刊
+- 业务表 ： 解决业务问题 抽象出来的，记录业务 比如说:一期又一期的期刊，存放他们不同的 index 来区分期刊
 
 - 实体表 ：具体到某个模型的数据，各种字段
 
-  sequelize操控数据库具体参考[地址]( https://itbilu.com/nodejs/npm/V1PExztfb.html#api )
+  sequelize 操控数据库具体参考[地址](https://itbilu.com/nodejs/npm/V1PExztfb.html#api)
 
-  模型层：分出 classic art flow user favor 
+  模型层：分出 classic art flow user favor
 
   定义模型层
 
-  > 引入sequelize实例 
+  > 引入 sequelize 实例
   >
   > 定义字段
   >
-  > 导出模型 
+  > 导出模型
 
-  > classic: 分为 movie sentence music  共同字段定义
+  > classic: 分为 movie sentence music 共同字段定义
   >
-  > art ：所有的实体,所有期刊  由几个模型拼凑
+  > art ：所有的实体,所有期刊 由几个模型拼凑
   >
-  > flow: 业务模型 应有的字段:`art_id`,`index`,`type`  对取出实体模型记录非常重要
+  > flow: 业务模型 应有的字段:`art_id`,`index`,`type` 对取出实体模型记录非常重要
   >
-  > user: 用户模型 
+  > user: 用户模型
   >
   > favor
 
 #### 获取最新一期期刊
 
-获取最新一期,就是拿出期刊号最大的那一个实体。 
+获取最新一期,就是拿出期刊号最大的那一个实体。
 
-> fow表降序取出第一条记录
+> fow 表降序取出第一条记录
 
 ```js
 router.get('/latest', new Auth().m,async(ctx)=>{
@@ -1348,22 +1313,22 @@ router.get('/latest', new Auth().m,async(ctx)=>{
    let art = async Art.getOne(latest.index)
    art.setDataValue('index',latest.index)
     ctx.body = art
-  
+
 })
 ```
 
 前端请求数据之前需要携带令牌,
 
-Art模型中定义查找记录方法
+Art 模型中定义查找记录方法
 
 ```js
 class Art {
-    // 传入art_id 和 type
- static async getOne(art_id, type) {
+  // 传入art_id 和 type
+  static async getOne(art_id, type) {
     const find = {
       where: {
-        id: art_id
-      }
+        id: art_id,
+      },
     }
 
     let result = null
@@ -1375,7 +1340,7 @@ class Art {
         result = await music.findOne(find)
         break
       case 300:
-        result =await sentence.findOne(find)
+        result = await sentence.findOne(find)
         break
       case 400:
         break
@@ -1396,7 +1361,7 @@ class Art {
 
 保证两个操作都能同时进行，可以使用数据库的`事物`
 
-sequelize操作数据库的事物
+sequelize 操作数据库的事物
 
 ```js
 sequelize.transaction(async (t)=>{
@@ -1427,40 +1392,39 @@ return sequelize.trancation(async t =>{
     await art.increment('fav_nums',{by:1,transaction:t})
 })
 
-// dislike 同理 
+// dislike 同理
 软删除 增加一条deleted_at
 MOdel.class.destroy(force:false,transcation:t)
 ```
 
 #### 上一期 下一期
 
-> 首先查找flow表中index的记录，然后index+1 ，增加异常判断，查询出art表的记录，并田间like_status和index
+> 首先查找 flow 表中 index 的记录，然后 index+1 ，增加异常判断，查询出 art 表的记录，并田间 like_status 和 index
 
 ```js
-
-router.get('/:index/next',new Auth().m,async(ctx)=>{
+router.get('/:index/next', new Auth().m, async (ctx) => {
   // 校验 获取art_id type 获取实例 然后增加属性
- const v = await new IndexValidator().validate(ctx)
- const index = v.get('path.index')
- const next = await flow.findOne({
-   where:{
-     index:index + 1  
-   }
- })
- if(!next){
-   throw new NotFoundException('没有下一期了')
- }
- let art = await Art.getOne(next.art_id,next.type)
- const like_status = await Favor.Userlike(ctx.auth.uid,next.art_id,next.type)
- art.setDataValue('index',next.index)
- art.setDataValue('like_status',like_status)
- ctx.body = art
+  const v = await new IndexValidator().validate(ctx)
+  const index = v.get('path.index')
+  const next = await flow.findOne({
+    where: {
+      index: index + 1,
+    },
+  })
+  if (!next) {
+    throw new NotFoundException('没有下一期了')
+  }
+  let art = await Art.getOne(next.art_id, next.type)
+  const like_status = await Favor.Userlike(ctx.auth.uid, next.art_id, next.type)
+  art.setDataValue('index', next.index)
+  art.setDataValue('like_status', like_status)
+  ctx.body = art
 })
 ```
 
 #### 获取点赞信息
 
-> 传入uid, art_id和type对favor表进行记录查询，返回布尔值
+> 传入 uid, art_id 和 type 对 favor 表进行记录查询，返回布尔值
 
 ```js
 static async Userlike(uid, art_id, type) {
@@ -1479,67 +1443,67 @@ static async Userlike(uid, art_id, type) {
 
 #### 获取某一期的详情信息
 
-> 传入type和art_id查找flow的记录 找到后查找like_status和index
+> 传入 type 和 art_id 查找 flow 的记录 找到后查找 like_status 和 index
 
 ```js
-router.get('/:type/:id/detail',new Auth().m,async(ctx)=>{
+router.get('/:type/:id/detail', new Auth().m, async (ctx) => {
   const v = await new ClassicValidator().validate(ctx)
   const art_id = v.get('path.id')
   const type = parseInt(v.get('path.type'))
   const classic = await flow.scope('bh').findOne({
-    where:{
+    where: {
       art_id,
-      type:{
-        [Op.not]:400
-      }
-    }
+      type: {
+        [Op.not]: 400,
+      },
+    },
   })
-  if(!classic){
+  if (!classic) {
     throw new NotFoundException('找不到该资源')
   }
-  let art = await Art.getOne(art_id,type)
-  const like_status = await Favor.Userlike(ctx.auth.uid,art_id,type)
-  art.setDataValue('index',classic.index)
-  art.setDataValue('like_status',like_status)
+  let art = await Art.getOne(art_id, type)
+  const like_status = await Favor.Userlike(ctx.auth.uid, art_id, type)
+  art.setDataValue('index', classic.index)
+  art.setDataValue('like_status', like_status)
   ctx.body = {
-    art
+    art,
   }
 })
 ```
 
 #### 获取用户喜欢期刊列表
 
-> 传入uid查询favor表得到一个数组，然后Art模型编写获取列表方法
+> 传入 uid 查询 favor 表得到一个数组，然后 Art 模型编写获取列表方法
 >
-> 定义一个对象 注意json的key永远都是字符串
+> 定义一个对象 注意 json 的 key 永远都是字符串
 >
 > ```js
-> const artInfoObj ={
-> 	100:[],
-> 	200:[],
-> 	300:[]
+> const artInfoObj = {
+>   100: [],
+>   200: [],
+>   300: [],
 > }
 > ```
 >
-> 获取列表元素 for循环 artInfoList
+> 获取列表元素 for 循环 artInfoList
 >
 > `artInfoObj[artinfo.type].push(artinfo.art_id)`
 >
-> 再循环对象 查找type下的数组列表
+> 再循环对象 查找 type 下的数组列表
 >
-> ids artInfoObj[key] 
+> ids artInfoObj[key]
 >
 > type key
 >
 > 如果是空数组 跳出循环
 >
-> for循环不需要定义大量的复杂逻辑,封装一个函数
+> for 循环不需要定义大量的复杂逻辑,封装一个函数
 >
-> 注意：obj的key是字符串  传参会报错
+> 注意：obj 的 key 是字符串 传参会报错
 >
-> 循环引用会报undefined  解决方法：局部导入
+> 循环引用会报 undefined 解决方法：局部导入
 >
-> 最终结果需要将所有的数组提取到大数组  [[],[],[]]
+> 最终结果需要将所有的数组提取到大数组 [[],[],[]]
 >
 > 使用`faltten`方法
 
@@ -1599,9 +1563,7 @@ static async getFavorList(list,uid) {
   }
 ```
 
-
-
-#### 获取热门图书 
+#### 获取热门图书
 
 ```js
  static async getHotBooklist(list){
@@ -1638,32 +1600,23 @@ static async getFavorList(list,uid) {
   }
 ```
 
-
-
 #### 评论
 
-
-
-
-定义book模型 id fav_nums
+定义 book 模型 id fav_nums
 
 从服务器请求数据 返回详情
 
-
-
 图书搜索
 
-定义校验器  三个参数 query ：keyword，start count
+定义校验器 三个参数 query ：keyword，start count
 
- start 可传可不传  传一个默认值  summary=1 鱼书搜索不返回概要信息
+start 可传可不传 传一个默认值 summary=1 鱼书搜索不返回概要信息
 
-encodeURI(q)  将可能为中文的编码转换
+encodeURI(q) 将可能为中文的编码转换
 
+#### json 序列化
 
-
-#### json序列化
-
-再返回的字段中定义`toJSON`方法指定返回的字段，sequelize就定义在模型中 实例方法。
+再返回的字段中定义`toJSON`方法指定返回的字段，sequelize 就定义在模型中 实例方法。
 
 `this.getDataValue()`
 
@@ -1677,25 +1630,25 @@ toJSON(){
 
 ![](https://image.yangxiansheng.top/img/QQ截图20200329204854.png?imagelist)
 
-原型链方法定义Model方法 删除dataValues的某些字段
+原型链方法定义 Model 方法 删除 dataValues 的某些字段
 
 #### KOA-STATIC
 
-处理静态资源  __dirname 项目目录
+处理静态资源 \_\_dirname 项目目录
 
 ```js
-访问/static文件夹
+访问 / static文件夹
 const static = require('koa-static')
 const path = require('path')
-app.use(static(path.join(__dirname,'/static')))
+app.use(static(path.join(__dirname, '/static')))
 // 这样localhost路径 就可以访问到static文件夹下的文件
 
-添加配置:host:'http://localhost:3000/'
+添加配置: host: 'http://localhost:3000/'
 ```
 
 ![](https://image.yangxiansheng.top/img/QQ截图20200329221551.png?imagelist)
 
-art模型替换image路径
+art 模型替换 image 路径
 
 #### 自动无感知刷新令牌
 
@@ -1732,14 +1685,13 @@ _request(url, resolve, reject, data = {}, method = 'GET', noRefetch = false) {
 
 ```
 
-
 ## Author
 
 👤 **努力中的杨先生**
 
-* Website: https://me.yangxiansheng.top/
-* Github: [@251205668](https://github.com/251205668)
-* LinkedIn: [@https:\/\/github.com\/251205668](https://linkedin.com/in/https:\/\/github.com\/251205668)
+- Website: https://me.yangxiansheng.top/
+- Github: [@251205668](https://github.com/251205668)
+- LinkedIn: [@https:\/\/github.com\/251205668](https://linkedin.com/in/https://github.com/251205668)
 
 ## 🤝 Contributing
 
