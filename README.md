@@ -17,7 +17,7 @@
 </p>
 
 > Koa framework foundation for node.js, a tutorial for building the restfuAPI
-> API Docs Path: [demo](https://easydoc.xyz/s/35758396/7YVq5Usm/hKRxn3Q2)
+> API Docs Path: [DOCS](https://easydoc.xyz/s/35758396/7YVq5Usm/hKRxn3Q2),[test](https://news.yangxiansheng.top/v1/book/hotbooks)
 
 ## Getting started
 
